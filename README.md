@@ -1,4 +1,4 @@
- Rest Full API in Auth JWT
+# Rest Full API in Auth JWT
 
 This repository contains the backend and frontend setup for a web application, with the backend built using Express.js and the frontend using React.js.
 

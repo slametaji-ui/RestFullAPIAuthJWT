@@ -33,7 +33,9 @@ REFRESH_TOKEN_SECRET = alksjalkjdnapoalhriikeub92iaje93j9ewr0dsakljdklkjoli54n6l
 - Configure the required environment variables such as database connection details, API ACCESS_TOKEN_SECRET and REFRESH_TOKEN_SECRET.
 
 5. **Run Development Server:**
+```
 npm start
+```
 This command will start the Express.js server.
 
 6. **Testing:**

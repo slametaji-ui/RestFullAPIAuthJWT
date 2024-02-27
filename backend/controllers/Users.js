@@ -16,20 +16,33 @@ export const GetUsers = async (req, res) => {
 
 export const Register = async (req, res) => {
     const { name, email, password, confPassword } = req.body;
-    if (password !== confPassword) return res.status(400).json({ msg: "Password dan Confirm Password tidak cocok" });
-    const salt = await bcrypt.genSalt();
-    const hashPassword = await bcrypt.hash(password, salt);
+
     try {
+        const existingUser = await Users.findOne({ email: email });
+        if (existingUser) {
+            return res.status(400).json({ msg: "Email sudah terdaftar" });
+        }
+
+        if (password !== confPassword) {
+            return res.status(400).json({ msg: "Password dan Confirm Password tidak cocok" });
+        }
+
+        const salt = await bcrypt.genSalt();
+        const hashPassword = await bcrypt.hash(password, salt);
+
         await Users.create({
             name: name,
             email: email,
             password: hashPassword
         });
+
         res.json({ msg: "Register Berhasil" });
     } catch (error) {
         console.log(error);
+        res.status(500).json({ msg: "Terjadi kesalahan saat proses registrasi" });
     }
 }
+
 
 export const Login = async (req, res) => {
     try {

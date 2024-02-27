@@ -19,8 +19,12 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     const API_BASE_URL = 'http://localhost:5000';
-
     const axiosJWT = axios.create();
+    const [buttonClicked, setButtonClicked] = useState(false);
+
+    useEffect(() => {
+        fetchAttendance();
+    });
 
     // Intercept requests to refresh the token if necessary
     axiosJWT.interceptors.request.use(async (config) => {
@@ -113,6 +117,7 @@ const Dashboard = () => {
 
             fetchAttendance();
             setMsg(response.data.msg);
+            setButtonClicked(true);
         } catch (error) {
             console.error(`Error during ${checkType}:`, error);
             if (error.response) {
@@ -127,7 +132,6 @@ const Dashboard = () => {
         refreshToken();
         setDevice(navigator.platform);
         getLocation();
-        fetchAttendance();
 
         const intervalId = setInterval(() => {
             setCurrentTime(new Date());
@@ -145,18 +149,20 @@ const Dashboard = () => {
             <Navbar />
             <div className="container">
                 <h1 className="title">Welcome {name}</h1>
-                <p>{msg}</p>
-                <div className="is-flex">
-                    {!isAfterNoon && (
-                        <button className="button is-warning" onClick={() => handleCheckInOrOut('checkIn')}>Check-In</button>
-                    )}
-                    {isAfterNoon && (
-                        <button className="button is-success ml-2" onClick={() => handleCheckInOrOut('checkOut')}>Check-Out</button>
-                    )}
+                <div>
+            {!buttonClicked && (
+                <div>
+                    <div className="is-flex">
+                        {!isAfterNoon && (
+                            <button className="button is-warning" onClick={() => handleCheckInOrOut('checkIn')}>Check-In</button>
+                        )}
+                        {isAfterNoon && (
+                            <button className="button is-success ml-2" onClick={() => handleCheckInOrOut('checkOut')}>Check-Out</button>
+                        )}
+                    </div>
                 </div>
-
-                {loading && <p>Loading attendance data...</p>}
-
+            )}
+        </div>
                 <table className='table is-striped is-fullwidth'>
                     <thead>
                         <tr>
